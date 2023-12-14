@@ -1,0 +1,6 @@
+[submodule "linux"]
+	path = linux
+	url = https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy
+[submodule "linux-meta"]
+	path = linux-meta
+	url = https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux-meta/+git/jammy
