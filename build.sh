@@ -11,6 +11,9 @@ git config --global user.name github-actions
 
 set -x
 
+# Increment for each release
+release_num=2
+
 apt-get update
 apt-get -y full-upgrade
 apt-get -y install packaging-dev equivs
@@ -22,10 +25,15 @@ apt-get -y install packaging-dev equivs
   mk-build-deps -i -r -t "apt-get -f -y --force-yes"
 
   # Local changes
-  git revert --no-edit ebddb1404900657b7f03a56ee4c34a9d218c4030
-  sed -i "/^CONFIG_NF_NAT_OVS/d" ./debian.master/config/annotations
-  dch --local "+adari" "Rebuilt for Adari"
-  dch --release ""
+  for patch in ../patches/*.patch; do
+      git am < "${patch}"
+  done
+
+
+  for i in $(seq 1 ${release_num}); do
+      dch --local "+adari" "Rebuilt for Adari"
+      dch --release ""
+  done
 
   LANG=C fakeroot debian/rules binary-headers binary-generic binary-perarch
 )
@@ -57,8 +65,11 @@ Description: Complete Generic Linux unsigned kernel and headers
  This package will always depend on the latest complete generic unsigned Linux kernel
  and headers.
 EOF
-  dch --local "+adari" "Rebuilt for Adari"
-  dch --release ""
+
+  for i in $(seq 1 ${release_num}); do
+      dch --local "+adari" "Rebuilt for Adari"
+      dch --release ""
+  done
 
   LANG=C fakeroot debian/rules binary
 )
