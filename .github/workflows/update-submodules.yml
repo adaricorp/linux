@@ -30,7 +30,12 @@ jobs:
         shell: bash
         run: |
           git submodule foreach \
-          'git checkout "$(git for-each-ref --sort=-creatordate --format \"%(refname)\" --count=1 refs/tags/${UBUNTU_KERNEL_VERSION}*)"'
+              'git checkout \
+                  $(git for-each-ref \
+                        --sort=-creatordate \
+                        --format "%(refname)" \
+                        --count=1 \
+                        "refs/tags/${UBUNTU_KERNEL_VERSION}*")'
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
